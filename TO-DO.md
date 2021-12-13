@@ -1,4 +1,4 @@
-## updated 12/12 by Nuno :)
+## updated 13/12 by Nuno :)
 
 ### problemas:
  - RESOLVIDO menu dentro do consultar aparenta funcionar apenas com input errado. how ironic.
