@@ -7,7 +7,7 @@ public class Client {
 	static final int DEFAULT_PORT = 2000;
 	static final String DEFAULT_HOST = "127.0.0.1";
 	static Scanner sc = new Scanner(System.in);
-	static String cc, hash_verified_c, escolha, resposta, menu, resposta1,escolha2;
+	static String cc, hash_verified_c, escolha, resposta_menu_ticketing, menu, resposta_menu_consultar,escolha2;
 	static boolean res;
 	//static String escolha;
 	//static String resposta;
@@ -141,12 +141,13 @@ public class Client {
 
 			st_out.flush();
 		
-			// verifica se a resposta é o 0 ou um dos menus (1 para consulta e 2 para registo)
-			resposta = st_in.readLine();
+			// recebe a resposta
+			resposta_menu_ticketing = st_in.readLine();
 
 			st_out.flush();
 
-			while (resposta.equals("0")) {
+			// verifica se a resposta é input invalido 
+			while (resposta_menu_ticketing.equals("0")) {
 				// escreve mensagem de erro
 				System.out.println(st_in.readLine());
 				while (!(menu = st_in.readLine()).equals("/")) {
@@ -158,12 +159,12 @@ public class Client {
 				st_out.println(escolha);
 				st_out.println();
 				st_out.flush();
-				resposta = st_in.readLine();
+				resposta_menu_ticketing = st_in.readLine();
 				st_out.flush();
 			}
 
-
-			if(resposta.equals("1")){
+			// verifica se a resposta é o 0 ou um dos menus (1 para consulta e 2 para registo)
+			if(resposta_menu_ticketing.equals("1")){
 				//recebe o menu de consultar
 				while (!(menu = st_in.readLine()).equals("/")) {
 					System.out.println(menu);
@@ -174,10 +175,9 @@ public class Client {
 				System.out.println(escolha2);
 				st_out.println();
 
-				
-
-				resposta1 = st_in.readLine();
-				while (resposta1.equals("0")) {
+				// recebe e  verifica a resposta ao menu consultar: 1 para sockets e 2 para rmi
+				resposta_menu_consultar = st_in.readLine();
+				while (resposta_menu_consultar.equals("0")) {
 					// escreve mensagem de erro
 					System.out.println(st_in.readLine());
 					while (!(menu = st_in.readLine()).equals("/")) {
@@ -189,20 +189,20 @@ public class Client {
 					st_out.println(escolha);
 					st_out.println();
 					st_out.flush();
-					resposta1 = st_in.readLine();
+					resposta_menu_consultar = st_in.readLine();
 					st_out.flush();
 				}
 
-				if(resposta1.equals("1")){
+				if(resposta_menu_consultar.equals("1")){
 					// java sockets
 					System.out.println("st_in.readLine()");
-				}else if(resposta1.equals("2")){
+				}else if(resposta_menu_consultar.equals("2")){
 					//java rmi
 					System.out.println(st_in.readLine());
 				}
 
 
-			}else if(resposta.equals("2")){
+			}else if(resposta_menu_ticketing.equals("2")){
 				System.out.println(st_in.readLine());
 			}else{
 				System.out.println("Erro");
