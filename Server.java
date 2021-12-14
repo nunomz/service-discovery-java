@@ -7,6 +7,11 @@ public class Server {
 	
 	public static void main(String[] args) {
 
+		if (args.length != 2) {
+				System.out.println("Erro: use java Server <ip> <port>");
+				System.exit(-1);
+		}
+
 		DEFAULT_HOST = args[0];
 		port =Integer.valueOf(args[1]);
 		SI identificacao = new SI();

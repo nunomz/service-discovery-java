@@ -101,24 +101,21 @@ public class Client {
 
 			// Printa o menu
 
-			System.out.println(
-					"********************************\nO que deseja fazer?            *\n                               *\n1-Consulta de servicos         *\n                               *\n                               *\n2-Registo de servico           *\n                               *\n********************************\n/");
+			System.out.println("********************************\nO que deseja fazer?            *\n                               *\n1-Consulta de servicos         *\n                               *\n                               *\n2-Registo de servico           *\n                               *\n********************************\n/");
 			String escolha_menu_um;
 			escolha_menu_um = sc.nextLine();
 			lista_final[0] = escolha_menu_um;
 
 			switch (escolha_menu_um) {
 				case "1":// CASO SEJA ESCOLHIDO CONSULTAR SERVIÇOS
-					System.out.println(
-							"********************************\nTecnologia a consultar?        *\n                               *\n1-JAVA Sockets TCP             *\n                               *\n                               *\n2-JAVA RMI                     *\n                               *\n********************************\n/");
+					System.out.println("********************************\nTecnologia a consultar?        *\n                               *\n1-JAVA Sockets TCP             *\n                               *\n                               *\n2-JAVA RMI                     *\n                               *\n********************************\n/");
 					lista_final[1] = sc.nextLine();
 					break;
 
 				case "2":// CASO SEJA ESCOLHIDO REGISTO DE SERVIÇOS
 					System.out.println("Forneca a descricao do servico de rede");
 					lista_final[1] = sc.nextLine();
-					System.out.println(
-							"********************************\nTecnologia desejada?        *\n                               *\n1-JAVA Sockets TCP             *\n                               *\n                               *\n2-JAVA RMI                     *\n                               *\n********************************\n/");
+					System.out.println("********************************\nTecnologia desejada?        *\n                               *\n1-JAVA Sockets TCP             *\n                               *\n                               *\n2-JAVA RMI                     *\n                               *\n********************************\n/");
 					lista_final[2] = sc.nextLine();
 					switch (lista_final[2]) {
 						case "1":
@@ -148,6 +145,8 @@ public class Client {
 					System.exit(-1);
 					break;
 			}
+
+			// out.print(lista_final);
 
 		} catch (IOException e) {
 			System.out.println("Erro ao comunicar com o servidor: " + e);

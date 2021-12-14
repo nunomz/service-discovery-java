@@ -6,13 +6,12 @@ public class SI extends Server {
 	static String cc, cc_hashed;
 	static boolean res;
 
-	public static void Ticketing(String ligacao_si, int in, String cc, PrintWriter out) {
+	public static void Ticketing(String host_st, int port_st, String hash, PrintWriter out) {
 		String[] si_list = new String[3];
-		si_list[0] = ligacao_si;
-		si_list[1] = String.valueOf(in);
-		si_list[2] = cc;
+		si_list[0] = host_st;
+		si_list[1] = port_st;
+		si_list[2] = hash;
 		out.println(si_list);
-
 	}
 
 	public void run(String DEFAULT_HOST_ST, int port_ST) {
@@ -42,18 +41,20 @@ public class SI extends Server {
 				BufferedReader in = new BufferedReader(new InputStreamReader(ligacao_si.getInputStream()));
 				PrintWriter out = new PrintWriter(ligacao_si.getOutputStream(), true);
 				cc= in.readLine();
+
 				// encripta o cc
 				cc_hashed = hash.getMd5(cc);
 				// out.println(cc_hashed);
-				System.out.print(cc_hashed);
+
 				// verifica se o cc esta registado
 				if (verification.getHash(cc_hashed) == 1) {
 					res = true;
+					System.out.print("Utilizador autenticado com a hash " + cc_hashed);
 					// out.println(res);
 
 				} else {
 					res = false;
-					out.print("Erro: Hash nao corresponde");
+					out.print("Erro: Utilizador nao encontrado");
 					ligacao_si.close();
 					System.exit(-1);
 					// out.println(res);
