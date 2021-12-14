@@ -8,104 +8,9 @@ public class ST extends Server {
     static String hash_st;
     // private static ServerSocket servidor; tirei daqui e continua a funcionar
     static int choice = 0;
-    static String escolha, tipo, descricao;
-    
+    static String ip, porta, nome, descricao;
 
-    public static String toStringMenu() {
-        return ("********************************\nO que deseja fazer?            *\n                               *\n1-Consulta de servicos         *\n                               *\n                               *\n2-Registo de servico           *\n                               *\n********************************\n");
-        /*
-         * nao funciona com prints, apenas com return. why tho ;-;
-         * System.out.println("O que deseja fazer?            *");
-         * System.out.println("                               *");
-         * System.out.println("1-Consulta de servicos         *");
-         * System.out.println("                               *");
-         * System.out.println("                               *");
-         * System.out.println("2-Registo de servico           *");
-         * System.out.println("                               *");
-         * System.out.println("********************************");
-         */
-    }
-
-    public static void runConsulta(Socket ligacao_st, BufferedReader in, PrintWriter out) {
-        //return ("********************************\nQue servico pretende?          *\n                               *\n1-Serviço de Temperatura       *\n                               *\n                               *\n2-Serviço de Humidade          *\n                               *\n********************************\n");
-        while(true){
-            try{
-                out.println("********************************\nTecnologia a consultar?        *\n                               *\n1-JAVA Sockets TCP             *\n                               *\n                               *\n2-JAVA RMI                     *\n                               *\n********************************\n/");
-                out.flush();
-                escolha = in.readLine();
-                System.out.print(escolha);
-
-                while (!(escolha.equals("1")) && !(escolha.equals("2"))) {
-                    out.println(0);
-                    out.println("Escolha invalida\n");
-                    out.flush();
-                    out.println("********************************\nTecnologia a consultar?        *\n                               *\n1-JAVA Sockets TCP             *\n                               *\n                               *\n2-JAVA RMI                     *\n                               *\n********************************\n/");
-                    out.flush();
-
-                    escolha = in.readLine();
-                    System.out.print(escolha);
-
-                    // System.out.println("o cliente escolheu " + escolha);
-                }
-                if(escolha.equals("1")){
-                    out.println(1);
-                    out.println("sockets goes here");
-                    System.out.println("O cliente escolheu consultar serviços com tecnologia JAVA Sockets");
-                }else if(escolha.equals("2")){
-                    out.println(2);
-                    out.println("rmi goes here");
-                    System.out.println("O cliente escolheu consultar serviços com tecnologia JAVA RMI");
-                }
-            } catch (IOException e) {
-                System.out.println("Erro na execucao da consulta de servicos: " + e);
-                System.exit(1);
-            }
-        }
-
-    }
-
-    public static void runRegisto(Socket ligacao_st, BufferedReader in, PrintWriter out) {
-        while(true){
-            try{
-                //pede a descricao do servico de rede
-                out.println("Forneca a descricao do servico de rede");
-                
-                descricao=in.readLine();
-                out.flush();
-        
-                //tecnologia desejada para o registo
-                out.println("********************************\nTecnologia desejada?        *\n                               *\n1-JAVA Sockets TCP             *\n                               *\n                               *\n2-JAVA RMI                     *\n                               *\n********************************\n/");
-                out.flush();
-                tipo = in.readLine();
-
-                while (!(tipo.equals("1")) && !(tipo.equals("2"))) {
-                    out.println(0);
-                    out.println("Escolha invalida\n");
-                    out.flush();
-                    out.println("********************************\nTecnologia desejada?        *\n                               *\n1-JAVA Sockets TCP             *\n                               *\n                               *\n2-JAVA RMI                     *\n                               *\n********************************\n/");
-                    out.flush();
-                    tipo = in.readLine();
-
-                }
-                if(escolha.equals("1")){
-                    out.println(1);
-                    out.println("sockets goes here");
-                    System.out.println("O cliente escolheu registar um serviço com tecnologia JAVA Sockets");
-                }else if(escolha.equals("2")){
-                    out.println(2);
-                    out.println("rmi goes here");
-                    System.out.println("O cliente escolheu registar um serviço com tecnologia JAVA RMI");
-                }
-            } catch (IOException e) {
-                System.out.println("Erro na execucao da consulta de servicos: " + e);
-                System.exit(1);
-            }
-        }
-
-    }
     public void run() {
-
-        int port = DEFAULT_PORT;
 
         ServerSocket servidor = null;
 
@@ -132,62 +37,13 @@ public class ST extends Server {
                 BufferedReader in = new BufferedReader(new InputStreamReader(ligacao_st.getInputStream()));
                 PrintWriter out = new PrintWriter(ligacao_st.getOutputStream(), true);
 
-                // out.println("*****Servico de Ticketing*****");
 
-                cc = in.readLine();
-                cc_hashed = in.readLine();
-
-                hash_st = hash.getMd5(cc);
-
-                if (cc_hashed.equals(hash_st) == false) {
-                    out.println("\nOs valores da hash fornecida e da calculada nao correspondem");
-                    out.flush();
-                    out.close();
-                    ligacao_st.close();
-                } else {
-                    out.println("*****Servico de Ticketing*****");
-                }
-
-                out.flush();
-
-                // envia o menu
-                out.println(
-                        "********************************\nO que deseja fazer?            *\n                               *\n1-Consulta de servicos         *\n                               *\n                               *\n2-Registo de servico           *\n                               *\n********************************\n/"); 
-                escolha = in.readLine();
-
-                // substituir menus printados por funcoes?
-                while (!(escolha.equals("1")) && !(escolha.equals("2"))) {
-                    out.println(0);
-                    out.println("Escolha invalida\n");
-                    out.flush();
-                    out.println(
-                            "********************************\nO que deseja fazer?            *\n                               *\n1-Consulta de servicos         *\n                               *\n                               *\n2-Registo de servico           *\n                               *\n********************************\n/");
-                    out.flush();
-
-                    escolha =in.readLine();
-                    System.out.print(escolha);
-
-                    // System.out.println("o cliente escolheu " + escolha);
-                }
-
-                if (escolha.equals("1")) {
-                    out.println(1);
-                    System.out.println("O cliente escolheu Consultar");
-                    runConsulta(ligacao_st, in, out);
-                } else if (escolha.equals("2")) {
-                    out.println(2);
-                    System.out.println("O cliente escolheu Registar");
-                    runRegisto(ligacao_st, in, out);
-                }
-
-                // out.close();
-                // ligacao_st.close();
-                // break;
-
+               
             } catch (IOException e) {
                 System.out.println("Erro na execucao do servidor: " + e);
                 System.exit(1);
             }
         }
+
     }
 }
