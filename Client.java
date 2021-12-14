@@ -12,10 +12,11 @@ public class Client {
 	static boolean res;
 	// static String escolha;
 	// static String resposta;
-	static String[] lista_final;
+	static String[] lista_final = new String[6];
 	static String servidor = DEFAULT_HOST;
 	static int porto = DEFAULT_PORT;
-	static int porto_st = 3000;
+	static int porto_st;
+	static String host_st;
 
 	public static void main(String[] args) {
 
@@ -31,7 +32,7 @@ public class Client {
 		SI(args);
 
 		// chama o ST depois de o SI correr
-		// ST(args);
+		ST(args);
 	}
 
 	public static void SI(String[] args) {
@@ -47,35 +48,37 @@ public class Client {
 
 		try {
 
-			BufferedReader in = new BufferedReader(new InputStreamReader(ligacao_si.getInputStream()));
-			PrintWriter out = new PrintWriter(ligacao_si.getOutputStream(), true);
+			//BufferedReader in = new BufferedReader(new InputStreamReader(ligacao_si.getInputStream()));
+			//PrintWriter out = new PrintWriter(ligacao_si.getOutputStream(), true);
+			
+			//para enviar e receber arrays
+			ObjectInputStream in = new ObjectInputStream(ligacao_si.getInputStream());
+			ObjectOutputStream out = new ObjectOutputStream(ligacao_si.getOutputStream());
 
 			System.out.println("Introduza o seu numero de CC");
 			cc = sc.nextLine();
-			out.println(cc);
+			out.writeObject(cc);
 
 			// limpa o buffer 2
 			out.flush();
 
 			// System.out.println("A sua hash e " + hash_verified_c);
-			String lista_SI;
-			lista_SI = in.readLine();
-			String[] Lista_SI2 = new String[3];
+			//String lista_SI;
+			String[] lista_SI = (String[])in.readObject();
 			// Lista_SI2 = lista_SI
-			System.out.print(lista_SI);
-			/*
-			 * //para não fechar a ligação instantaneamente
-			 * String msg;
-			 * while ((msg = in.readLine()) != null)
-			 * System.out.println("Resposta do servidor: " + msg);
-			 */
+			//System.out.println(lista_SI);
+			
+			host_st = lista_SI[0];
+			porto_st = Integer.valueOf(lista_SI[1]);
 
+			System.out.println("IP do Serviço de Ticketing: " + host_st + "\nPort do ST: " + porto_st + "\nChave de Acesso (Hash):" + lista_SI[2]);
+			
 			ligacao_si.close();
 			// System.out.println("Terminou a ligacao ao SI");
 
 			return;
 
-		} catch (IOException e) {
+		} catch (Exception e) {
 			System.out.println("Erro ao comunicar com o servidor: " + e);
 			System.exit(1);
 		}
@@ -87,13 +90,17 @@ public class Client {
 
 		// Create a client socket
 		try {
-			ligacao_st = new Socket(servidor, porto_st);
+			ligacao_st = new Socket(host_st, porto_st);
+			System.out.println("Conexão estabelecida com Serviço de Ticketing no IP " + host_st + "e porto " + porto_st);
 		} catch (IOException e) {
 			System.out.println("Erro");
 		}
 		try {
-			BufferedReader st_in = new BufferedReader(new InputStreamReader(ligacao_st.getInputStream()));
-			PrintWriter st_out = new PrintWriter(ligacao_st.getOutputStream());
+			//BufferedReader st_in = new BufferedReader(new InputStreamReader(ligacao_st.getInputStream()));
+			//PrintWriter st_out = new PrintWriter(ligacao_st.getOutputStream());
+
+			ObjectInputStream in = new ObjectInputStream(ligacao_st.getInputStream());
+			ObjectOutputStream out = new ObjectOutputStream(ligacao_st.getOutputStream());
 
 			// printa o titulo
 
@@ -101,21 +108,19 @@ public class Client {
 
 			// Printa o menu
 
-			System.out.println("********************************\nO que deseja fazer?            *\n                               *\n1-Consulta de servicos         *\n                               *\n                               *\n2-Registo de servico           *\n                               *\n********************************\n/");
-			String escolha_menu_um;
-			escolha_menu_um = sc.nextLine();
-			lista_final[0] = escolha_menu_um;
+			System.out.println("********************************\nO que deseja fazer?            *\n                               *\n1-Consulta de servicos         *\n                               *\n                               *\n2-Registo de servico           *\n                               *\n********************************\n");
+			lista_final[0] = sc.nextLine();
 
-			switch (escolha_menu_um) {
+			switch (lista_final[0]) {
 				case "1":// CASO SEJA ESCOLHIDO CONSULTAR SERVIÇOS
-					System.out.println("********************************\nTecnologia a consultar?        *\n                               *\n1-JAVA Sockets TCP             *\n                               *\n                               *\n2-JAVA RMI                     *\n                               *\n********************************\n/");
+					System.out.println("********************************\nTecnologia a consultar?        *\n                               *\n1-JAVA Sockets TCP             *\n                               *\n                               *\n2-JAVA RMI                     *\n                               *\n********************************\n");
 					lista_final[1] = sc.nextLine();
 					break;
 
 				case "2":// CASO SEJA ESCOLHIDO REGISTO DE SERVIÇOS
 					System.out.println("Forneca a descricao do servico de rede");
 					lista_final[1] = sc.nextLine();
-					System.out.println("********************************\nTecnologia desejada?        *\n                               *\n1-JAVA Sockets TCP             *\n                               *\n                               *\n2-JAVA RMI                     *\n                               *\n********************************\n/");
+					System.out.println("********************************\nTecnologia desejada?        *\n                               *\n1-JAVA Sockets TCP             *\n                               *\n                               *\n2-JAVA RMI                     *\n                               *\n********************************\n");
 					lista_final[2] = sc.nextLine();
 					switch (lista_final[2]) {
 						case "1":
@@ -145,8 +150,8 @@ public class Client {
 					System.exit(-1);
 					break;
 			}
-
-			// out.print(lista_final);
+			
+			out.writeObject(lista_final);
 
 		} catch (IOException e) {
 			System.out.println("Erro ao comunicar com o servidor: " + e);

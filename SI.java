@@ -6,12 +6,17 @@ public class SI extends Server {
 	static String cc, cc_hashed;
 	static boolean res;
 
-	public static void Ticketing(String host_st, int port_st, String hash, PrintWriter out) {
-		String[] si_list = new String[3];
-		si_list[0] = host_st;
-		si_list[1] = port_st;
-		si_list[2] = hash;
-		out.println(si_list);
+	public static void Ticketing(String host_st, int port_st, String hash, ObjectOutputStream obj_out) {
+		try{
+			String[] si_list = new String[3];
+			si_list[0] = host_st;
+			si_list[1] = String.valueOf(port_st);
+			si_list[2] = hash;
+			obj_out.writeObject(si_list);
+		}catch(IOException e){
+			e.printStackTrace(System.out);
+			System.exit(-1);
+		}
 	}
 
 	public void run(String DEFAULT_HOST_ST, int port_ST) {
@@ -38,9 +43,14 @@ public class SI extends Server {
 				// java.net.ServerSocket
 				Socket ligacao_si = servidor.accept();
 
-				BufferedReader in = new BufferedReader(new InputStreamReader(ligacao_si.getInputStream()));
-				PrintWriter out = new PrintWriter(ligacao_si.getOutputStream(), true);
-				cc= in.readLine();
+				//BufferedReader in = new BufferedReader(new InputStreamReader(ligacao_si.getInputStream()));
+				//PrintWriter out = new PrintWriter(ligacao_si.getOutputStream(), true);
+
+				//para enviar e receber arrays
+				ObjectOutputStream obj_out = new ObjectOutputStream(ligacao_si.getOutputStream());
+				ObjectInputStream obj_in = new ObjectInputStream(ligacao_si.getInputStream());
+
+				cc= (String)obj_in.readObject();
 
 				// encripta o cc
 				cc_hashed = hash.getMd5(cc);
@@ -54,20 +64,20 @@ public class SI extends Server {
 
 				} else {
 					res = false;
-					out.print("Erro: Utilizador nao encontrado");
+					//out.print("Erro: Utilizador nao encontrado");
 					ligacao_si.close();
 					System.exit(-1);
 					// out.println(res);
 				}
 
-				out.flush();
+				obj_out.flush();
 
-				Ticketing(DEFAULT_HOST_ST, port_ST, cc_hashed, out);
+				Ticketing(DEFAULT_HOST_ST, port_ST, cc_hashed, obj_out);
 
-				out.close();
+				//out.close();
 				ligacao_si.close();
 
-			} catch (IOException e) {
+			} catch (Exception e) {
 				System.out.println("Erro na execucao do servidor: " + e);
 				System.exit(1);
 			}

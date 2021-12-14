@@ -19,6 +19,6 @@ public class Server {
 		
 		identificacao.run(DEFAULT_HOST,port);
 		System.out.println("SI terminado.");
-		ticketing.run();	
+		//ticketing.run();	
 	}	
 }
