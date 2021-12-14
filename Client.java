@@ -7,7 +7,7 @@ public class Client {
 	static final int DEFAULT_PORT = 2000;
 	static final String DEFAULT_HOST = "127.0.0.1";
 	static Scanner sc = new Scanner(System.in);
-	static String cc, hash_verified_c, escolha, resposta_menu_ticketing, menu, resposta_menu_consultar,escolha2;
+	static String cc, hash_verified_c, escolha, resposta_menu_ticketing, menu, resposta_menu_consultar,escolha2, descricao;
 	static boolean res;
 	//static String escolha;
 	//static String resposta;
@@ -18,10 +18,10 @@ public class Client {
 
 	public static void main(String[] args) {
 
-		if (args.length != 1) {
+		/*if (args.length != 1) {
 			System.out.println("Erro: use java presencesClient <ip>");
 			System.exit(-1);
-		}
+		} */
 
 		// Create a representation of the IP address of the Server: API
 		// java.net.InetAddress
@@ -81,7 +81,7 @@ public class Client {
 			// apenas para testar.
 			hash_verified_c = in.readLine();
 			// System.out.println("A sua hash e " + hash_verified_c);
-
+			System.out.println(in.readLine());
 			/*
 			 * //para não fechar a ligação instantaneamente
 			 * String msg;
@@ -204,6 +204,11 @@ public class Client {
 
 			}else if(resposta_menu_ticketing.equals("2")){
 				System.out.println(st_in.readLine());
+				descricao = sc.nextLine();
+				st_out.println(descricao);
+				st_out.flush();
+
+
 			}else{
 				System.out.println("Erro");
 			}

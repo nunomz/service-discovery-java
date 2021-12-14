@@ -8,7 +8,8 @@ public class ST extends Server {
     static String hash_st;
     // private static ServerSocket servidor; tirei daqui e continua a funcionar
     static int choice = 0;
-    static String escolha;
+    static String escolha, tipo, descricao;
+    
 
     public static String toStringMenu() {
         return ("********************************\nO que deseja fazer?            *\n                               *\n1-Consulta de servicos         *\n                               *\n                               *\n2-Registo de servico           *\n                               *\n********************************\n");
@@ -63,10 +64,45 @@ public class ST extends Server {
 
     }
 
-    public static String runRegisto() {
-        return ("REGISTO SHOULD BE HERE");
-    }
+    public static void runRegisto(Socket ligacao_st, BufferedReader in, PrintWriter out) {
+        while(true){
+            try{
+                //pede a descricao do servico de rede
+                out.println("Forneca a descricao do servico de rede");
+                
+                descricao=in.readLine();
+                out.flush();
+        
+                //tecnologia desejada para o registo
+                out.println("********************************\nTecnologia desejada?        *\n                               *\n1-JAVA Sockets TCP             *\n                               *\n                               *\n2-JAVA RMI                     *\n                               *\n********************************\n/");
+                out.flush();
+                tipo = in.readLine();
 
+                while (!(tipo.equals("1")) && !(tipo.equals("2"))) {
+                    out.println(0);
+                    out.println("Escolha invalida\n");
+                    out.flush();
+                    out.println("********************************\nTecnologia desejada?        *\n                               *\n1-JAVA Sockets TCP             *\n                               *\n                               *\n2-JAVA RMI                     *\n                               *\n********************************\n/");
+                    out.flush();
+                    tipo = in.readLine();
+
+                }
+                if(escolha.equals("1")){
+                    out.println(1);
+                    out.println("sockets goes here");
+                    System.out.println("O cliente escolheu registar um serviço com tecnologia JAVA Sockets");
+                }else if(escolha.equals("2")){
+                    out.println(2);
+                    out.println("rmi goes here");
+                    System.out.println("O cliente escolheu registar um serviço com tecnologia JAVA RMI");
+                }
+            } catch (IOException e) {
+                System.out.println("Erro na execucao da consulta de servicos: " + e);
+                System.exit(1);
+            }
+        }
+
+    }
     public void run() {
 
         int port = DEFAULT_PORT;
@@ -140,8 +176,8 @@ public class ST extends Server {
                     runConsulta(ligacao_st, in, out);
                 } else if (escolha.equals("2")) {
                     out.println(2);
-                    out.println("REGISTAR GOES HERE");
                     System.out.println("O cliente escolheu Registar");
+                    runRegisto(ligacao_st, in, out);
                 }
 
                 // out.close();

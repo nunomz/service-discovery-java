@@ -5,12 +5,21 @@ public class SI extends Server {
 	static int DEFAULT_PORT=2000;
 	static String cc, cc_hashed;
 	static boolean res;
+	static int port=3000;
+	static String host="127.0.0.1";
+
+	public static void Ticketing(Socket ligacao_si, BufferedReader in, PrintWriter out){
+		out.println("Servico de Ticketing no endereco "+ host +" e porta"+ port);
+	}
 
 	public void run(){
 
 		int port=DEFAULT_PORT;
 			
 		ServerSocket servidor = null; 
+
+
+
 	
 		// Creates a server socket API java.net.ServerSocket	
 		try {
@@ -55,9 +64,11 @@ public class SI extends Server {
 
 				// envia a hash encriptada ao cliente. NOTA: só chega aqui se o cliente estiver autenticado
 				out.println(cc_hashed);
-
+				
 				out.flush();
-
+				
+				Ticketing(ligacao_si, in, out);
+				
 				System.out.println("Cliente com o CC " + cc + " conectado e autenticado com sucesso no porto " + port);
 
 				out.close();
