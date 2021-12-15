@@ -21,3 +21,8 @@
 - ST.registo simplesmente guarda a informacao do servico e depois apresenta no consultar (usar structs?)
 
 - necessita do ip e port do ST para se conectar!!! usar default_address
+
+
+
+
+# PRECIAMOS DE METER A HASH A ENVIAR!!!!!!!!

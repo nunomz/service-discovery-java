@@ -34,31 +34,32 @@ public class ST extends Server {
 
                 System.out.println("\nO cliente conectou-se ao serviço de ticketing.");
 
-                //BufferedReader in = new BufferedReader(new InputStreamReader(ligacao_st.getInputStream()));
-                //PrintWriter out = new PrintWriter(ligacao_st.getOutputStream(), true);
+                // BufferedReader in = new BufferedReader(new
+                // InputStreamReader(ligacao_st.getInputStream()));
+                // PrintWriter out = new PrintWriter(ligacao_st.getOutputStream(), true);
 
                 ObjectOutputStream out = new ObjectOutputStream(ligacao_st.getOutputStream());
                 ObjectInputStream in = new ObjectInputStream(ligacao_st.getInputStream());
 
-                String[] lista_respostas = (String[])in.readObject();
+                String[] lista_respostas = (String[]) in.readObject();
 
-                System.out.println(lista_respostas[0]);
+                if (lista_respostas[0].equals("1")) {
 
-                if(lista_respostas[0] == "1"){
-
-                }else if(lista_respostas[0] == "2"){
+                } else if (lista_respostas[0].equals("2")) {
 
                     descricao = lista_respostas[1];
 
-                    if(lista_respostas[2] == "1"){
-                        tecnologia = lista_respostas[2];
-                        ip = lista_respostas[3];
-                        porta = lista_respostas[4];
-                    }else if(lista_respostas[2] == "2"){
-                        tecnologia = lista_respostas[2];
-                        ip = lista_respostas[3];
-                        porta = lista_respostas[4];
-                        nome = lista_respostas[5];
+                    if (lista_respostas[2].equals("1")) {
+                        tecnologia = String.valueOf(lista_respostas[2]);
+                        ip = String.valueOf(lista_respostas[3]);
+                        porta = String.valueOf(lista_respostas[4]);
+
+                    } else if (lista_respostas[2].equals("2")) {
+                        tecnologia = String.valueOf(lista_respostas[2]);
+                        ip = String.valueOf(lista_respostas[3]);
+                        porta = String.valueOf(lista_respostas[4]);
+                        nome = String.valueOf(lista_respostas[5]);
+
                     }
                 }
                 System.out.println(" " + descricao + " " + tecnologia + " " + ip + " " + porta + " " + " " + nome);

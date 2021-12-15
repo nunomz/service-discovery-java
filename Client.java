@@ -32,7 +32,7 @@ public class Client {
 		SI(args);
 
 		// chama o ST depois de o SI correr
-		ST(args);
+		ST(host_st, porto_st);
 	}
 
 	public static void SI(String[] args) {
@@ -48,10 +48,11 @@ public class Client {
 
 		try {
 
-			//BufferedReader in = new BufferedReader(new InputStreamReader(ligacao_si.getInputStream()));
-			//PrintWriter out = new PrintWriter(ligacao_si.getOutputStream(), true);
-			
-			//para enviar e receber arrays
+			// BufferedReader in = new BufferedReader(new
+			// InputStreamReader(ligacao_si.getInputStream()));
+			// PrintWriter out = new PrintWriter(ligacao_si.getOutputStream(), true);
+
+			// para enviar e receber arrays
 			ObjectInputStream in = new ObjectInputStream(ligacao_si.getInputStream());
 			ObjectOutputStream out = new ObjectOutputStream(ligacao_si.getOutputStream());
 
@@ -63,20 +64,19 @@ public class Client {
 			out.flush();
 
 			// System.out.println("A sua hash e " + hash_verified_c);
-			//String lista_SI;
-			String[] lista_SI = (String[])in.readObject();
+			// String lista_SI;
+			String[] lista_SI = (String[]) in.readObject();
 			// Lista_SI2 = lista_SI
-			//System.out.println(lista_SI);
-			
+
 			host_st = lista_SI[0];
 			porto_st = Integer.valueOf(lista_SI[1]);
 
-			System.out.println("IP do Serviço de Ticketing: " + host_st + "\nPort do ST: " + porto_st + "\nChave de Acesso (Hash):" + lista_SI[2]);
-			
-			ligacao_si.close();
-			// System.out.println("Terminou a ligacao ao SI");
+			System.out.println("IP do Serviço de Ticketing: " + host_st + "\nPort do ST: " + porto_st
+					+ "\nChave de Acesso (Hash):" + lista_SI[2]);
 
-			return;
+			ligacao_si.close();
+			out.close();
+			// System.out.println("Terminou a ligacao ao SI");
 
 		} catch (Exception e) {
 			System.out.println("Erro ao comunicar com o servidor: " + e);
@@ -84,20 +84,22 @@ public class Client {
 		}
 	}
 
-	public static void ST(String[] args) {
+	public static void ST(String host_st2, int porto_st2) {
 
 		Socket ligacao_st = null;
 
 		// Create a client socket
 		try {
-			ligacao_st = new Socket(host_st, porto_st);
-			System.out.println("Conexão estabelecida com Serviço de Ticketing no IP " + host_st + "e porto " + porto_st);
+			ligacao_st = new Socket(host_st2, porto_st2);
+			System.out
+					.println("Conexão estabelecida com Serviço de Ticketing no IP " + host_st + "e porto " + porto_st);
 		} catch (IOException e) {
 			System.out.println("Erro");
 		}
 		try {
-			//BufferedReader st_in = new BufferedReader(new InputStreamReader(ligacao_st.getInputStream()));
-			//PrintWriter st_out = new PrintWriter(ligacao_st.getOutputStream());
+			// BufferedReader st_in = new BufferedReader(new
+			// InputStreamReader(ligacao_st.getInputStream()));
+			// PrintWriter st_out = new PrintWriter(ligacao_st.getOutputStream());
 
 			ObjectInputStream in = new ObjectInputStream(ligacao_st.getInputStream());
 			ObjectOutputStream out = new ObjectOutputStream(ligacao_st.getOutputStream());
@@ -108,19 +110,22 @@ public class Client {
 
 			// Printa o menu
 
-			System.out.println("********************************\nO que deseja fazer?            *\n                               *\n1-Consulta de servicos         *\n                               *\n                               *\n2-Registo de servico           *\n                               *\n********************************\n");
+			System.out.println(
+					"********************************\nO que deseja fazer?            *\n                               *\n1-Consulta de servicos         *\n                               *\n                               *\n2-Registo de servico           *\n                               *\n********************************\n");
 			lista_final[0] = sc.nextLine();
 
 			switch (lista_final[0]) {
 				case "1":// CASO SEJA ESCOLHIDO CONSULTAR SERVIÇOS
-					System.out.println("********************************\nTecnologia a consultar?        *\n                               *\n1-JAVA Sockets TCP             *\n                               *\n                               *\n2-JAVA RMI                     *\n                               *\n********************************\n");
+					System.out.println(
+							"********************************\nTecnologia a consultar?        *\n                               *\n1-JAVA Sockets TCP             *\n                               *\n                               *\n2-JAVA RMI                     *\n                               *\n********************************\n");
 					lista_final[1] = sc.nextLine();
 					break;
 
 				case "2":// CASO SEJA ESCOLHIDO REGISTO DE SERVIÇOS
 					System.out.println("Forneca a descricao do servico de rede");
 					lista_final[1] = sc.nextLine();
-					System.out.println("********************************\nTecnologia desejada?        *\n                               *\n1-JAVA Sockets TCP             *\n                               *\n                               *\n2-JAVA RMI                     *\n                               *\n********************************\n");
+					System.out.println(
+							"********************************\nTecnologia desejada?        *\n                               *\n1-JAVA Sockets TCP             *\n                               *\n                               *\n2-JAVA RMI                     *\n                               *\n********************************\n");
 					lista_final[2] = sc.nextLine();
 					switch (lista_final[2]) {
 						case "1":
@@ -150,7 +155,7 @@ public class Client {
 					System.exit(-1);
 					break;
 			}
-			
+
 			out.writeObject(lista_final);
 
 		} catch (IOException e) {

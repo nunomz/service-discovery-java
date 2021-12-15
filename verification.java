@@ -10,7 +10,6 @@ public class verification {
 	public static int getHash(String cc_hash) {
 		String fileName = "hashes.csv";
 		File file = new File(fileName);
-		int cont = 0;
 
 		// this gives you a 2-dimensional array of strings
 		List<List<String>> lines = new ArrayList<>();
