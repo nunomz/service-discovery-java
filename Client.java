@@ -12,11 +12,12 @@ public class Client {
 	static boolean res;
 	// static String escolha;
 	// static String resposta;
-	static String[] lista_final = new String[6];
+	static String[] lista_final = new String[8];
 	static String servidor = DEFAULT_HOST;
 	static int porto = DEFAULT_PORT;
 	static int porto_st;
 	static String host_st;
+
 
 	public static void main(String[] args) {
 
@@ -70,10 +71,10 @@ public class Client {
 
 			host_st = lista_SI[0];
 			porto_st = Integer.valueOf(lista_SI[1]);
-
+		
 			System.out.println("IP do Serviço de Ticketing: " + host_st + "\nPort do ST: " + porto_st
 					+ "\nChave de Acesso (Hash):" + lista_SI[2]);
-
+			lista_final[0] = lista_SI[2];
 			ligacao_si.close();
 			out.close();
 			// System.out.println("Terminou a ligacao ao SI");
@@ -103,45 +104,46 @@ public class Client {
 
 			ObjectInputStream in = new ObjectInputStream(ligacao_st.getInputStream());
 			ObjectOutputStream out = new ObjectOutputStream(ligacao_st.getOutputStream());
-
+			//ADICIONA o cc à lista apos a hash 
+			lista_final[1]= cc;
 			// printa o titulo
-
+			
 			System.out.print("****BEM VINDO AO SERVICO DE TICKETING****");
 
 			// Printa o menu
 
 			System.out.println(
 					"********************************\nO que deseja fazer?            *\n                               *\n1-Consulta de servicos         *\n                               *\n                               *\n2-Registo de servico           *\n                               *\n********************************\n");
-			lista_final[0] = sc.nextLine();
+			lista_final[2] = sc.nextLine();
 
-			switch (lista_final[0]) {
+			switch (lista_final[2]) {
 				case "1":// CASO SEJA ESCOLHIDO CONSULTAR SERVIÇOS
 					System.out.println(
 							"********************************\nTecnologia a consultar?        *\n                               *\n1-JAVA Sockets TCP             *\n                               *\n                               *\n2-JAVA RMI                     *\n                               *\n********************************\n");
-					lista_final[1] = sc.nextLine();
+					lista_final[3] = sc.nextLine();
 					break;
 
 				case "2":// CASO SEJA ESCOLHIDO REGISTO DE SERVIÇOS
 					System.out.println("Forneca a descricao do servico de rede");
-					lista_final[1] = sc.nextLine();
+					lista_final[3] = sc.nextLine();
 					System.out.println(
 							"********************************\nTecnologia desejada?        *\n                               *\n1-JAVA Sockets TCP             *\n                               *\n                               *\n2-JAVA RMI                     *\n                               *\n********************************\n");
-					lista_final[2] = sc.nextLine();
-					switch (lista_final[2]) {
+					lista_final[4] = sc.nextLine();
+					switch (lista_final[4]) {
 						case "1":
 							System.out.println("Forneca o IP: ");
-							lista_final[3] = sc.nextLine();
+							lista_final[5] = sc.nextLine();
 							System.out.println("Forneca a porta: ");
-							lista_final[4] = sc.nextLine();
+							lista_final[6] = sc.nextLine();
 							break;
 
 						case "2":
 							System.out.println("Forneca o IP: ");
-							lista_final[3] = sc.nextLine();
-							System.out.println("Forneca a porta: ");
-							lista_final[4] = sc.nextLine();
-							System.out.println("Forneca o nome: ");
 							lista_final[5] = sc.nextLine();
+							System.out.println("Forneca a porta: ");
+							lista_final[6] = sc.nextLine();
+							System.out.println("Forneca o nome: ");
+							lista_final[7] = sc.nextLine();
 							break;
 
 						default:

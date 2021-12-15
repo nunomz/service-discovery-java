@@ -43,22 +43,33 @@ public class ST extends Server {
 
                 String[] lista_respostas = (String[]) in.readObject();
 
-                if (lista_respostas[0].equals("1")) {
+                // Recebe a hash, e o cc, é necessario fazer a confirmação
+                hash_st = hash.getMd5(lista_respostas[1]);
+                if (hash_st.equals(lista_respostas[0])) {
+                    System.out.println("*Hashes coincidem!*");
+                } else {
+                    System.out.println("*Erro:Hashes nao coincidem*");
+                    System.exit(-1);
+                    out.close();
+                    ligacao_st.close();
+                }
 
-                } else if (lista_respostas[0].equals("2")) {
+                if (lista_respostas[2].equals("1")) {
 
-                    descricao = lista_respostas[1];
+                } else if (lista_respostas[2].equals("2")) {
 
-                    if (lista_respostas[2].equals("1")) {
-                        tecnologia = String.valueOf(lista_respostas[2]);
-                        ip = String.valueOf(lista_respostas[3]);
-                        porta = String.valueOf(lista_respostas[4]);
+                    descricao = lista_respostas[3];
 
-                    } else if (lista_respostas[2].equals("2")) {
-                        tecnologia = String.valueOf(lista_respostas[2]);
-                        ip = String.valueOf(lista_respostas[3]);
-                        porta = String.valueOf(lista_respostas[4]);
-                        nome = String.valueOf(lista_respostas[5]);
+                    if (lista_respostas[4].equals("1")) {
+                        tecnologia = String.valueOf(lista_respostas[4]);
+                        ip = String.valueOf(lista_respostas[5]);
+                        porta = String.valueOf(lista_respostas[6]);
+
+                    } else if (lista_respostas[4].equals("2")) {
+                        tecnologia = String.valueOf(lista_respostas[4]);
+                        ip = String.valueOf(lista_respostas[5]);
+                        porta = String.valueOf(lista_respostas[6]);
+                        nome = String.valueOf(lista_respostas[7]);
 
                     }
                 }
