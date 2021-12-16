@@ -7,17 +7,10 @@ public class Client {
 	static final int DEFAULT_PORT = 2000;
 	static final String DEFAULT_HOST = "127.0.0.1";
 	static Scanner sc = new Scanner(System.in);
-	static String cc, hash_verified_c, escolha, resposta_menu_ticketing, menu, resposta_menu_consultar, escolha2,
-			descricao;
-	static boolean res;
-	// static String escolha;
-	// static String resposta;
+	static String cc, servidor = DEFAULT_HOST, host_st;
 	static String[] lista_final = new String[8];
-	static String servidor = DEFAULT_HOST;
-	static int porto = DEFAULT_PORT;
-	static int porto_st;
-	static String host_st;
-
+	static int porto_st, porto = DEFAULT_PORT;
+	//static List<List<String>> lista_servicos;
 
 	public static void main(String[] args) {
 
@@ -121,8 +114,40 @@ public class Client {
 					System.out.println(
 							"********************************\nTecnologia a consultar?        *\n                               *\n1-JAVA Sockets TCP             *\n                               *\n                               *\n2-JAVA RMI                     *\n                               *\n********************************\n");
 					lista_final[3] = sc.nextLine();
-					break;
 
+					out.writeObject(lista_final); // envia a lista apenas até a tecnologia
+					
+					@SuppressWarnings("unchecked") // sem isto dá um aviso ao compilar. parece-me batota mas funciona. tentar resolver
+					List<List<String>> lista_servicos = (List<List<String>>)in.readObject();
+					
+					if(lista_final[3].equals("1")){ // caso escolha TCP
+						
+						System.out.println("Lista de Serviços com tecnologia Sockets TCP: \n");
+                        for (int i = 1; i <= lista_servicos.size(); i++) {
+                            if (lista_servicos.get(i - 1).get(2).equals("1")) {
+                                System.out.println(
+                                        i + "-IP: " + lista_servicos.get(i - 1).get(3) + " PORT: " + lista_servicos.get(i - 1).get(4));
+                                System.out.println("  Descricao: " + lista_servicos.get(i - 1).get(1));
+                                System.out.println("  Autor do Registo: " + lista_servicos.get(i - 1).get(0));
+                                System.out.println("\n");
+                            }
+                        }
+
+					}else if(lista_final[3].equals("2")){ // caso escolha RMI
+						
+						System.out.println("Lista de Serviços com tecnologia JAVA RMI: \n");
+                        for (int i = 1; i <= lista_servicos.size(); i++) {
+                            if (lista_servicos.get(i - 1).get(2).equals("2")) {
+                                System.out.println(i + "-IP: " + lista_servicos.get(i - 1).get(3) + " PORT: "
+                                        + lista_servicos.get(i - 1).get(4) + " Nome: " + lista_servicos.get(i - 1).get(5));
+                                System.out.println("  Descricao: " + lista_servicos.get(i - 1).get(1));
+                                System.out.println("  Autor do Registo: " + lista_servicos.get(i - 1).get(0));
+                                System.out.println("\n");
+                            }
+                        }
+					}
+
+					break;
 				case "2":// CASO SEJA ESCOLHIDO REGISTO DE SERVIÇOS
 					System.out.println("Forneca a descricao do servico de rede");
 					lista_final[3] = sc.nextLine();
@@ -147,20 +172,24 @@ public class Client {
 							break;
 
 						default:
-							System.out.println("Erro: nao existe essa opcao");
+							System.out.println("Erro: Nao existe essa opcao");
 							System.exit(-1);
 							break;
 					}
+					out.writeObject(lista_final);
+					System.out.print("Registo efetuado com sucesso. Prima qualquer tecla para terminar a execução do programa. ");
+					System.in.read();
+					System.exit(1);
 					break;
 				default:
-					System.out.println("Erro: nao existe essa opcao");
+					System.out.println("Erro: Nao existe essa opcao");
 					System.exit(-1);
 					break;
 			}
 
-			out.writeObject(lista_final);
+			//out.writeObject(lista_final);
 
-		} catch (IOException e) {
+		} catch (Exception e) {
 			System.out.println("Erro ao comunicar com o servidor: " + e);
 			System.exit(1);
 		}

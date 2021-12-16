@@ -4,17 +4,12 @@ import java.util.*;
 
 public class ST extends Server {
     static int DEFAULT_PORT = 3000;
-    static String cc;
-    static String cc_hashed;
-    static String hash_st;
-    // private static ServerSocket servidor; tirei daqui e continua a funcionar
-    static int choice = 0;
-    static String tecnologia, ip, porta, nome, descricao;
+    static String hash_st, csv_servicos = "servicos.csv";
     static String[] lista_csv;
     static List<List<String>> lines;
 
     public void toCsv(String[] lista) throws Exception {
-        FileWriter writer = new FileWriter("rmi.csv", true);
+        FileWriter writer = new FileWriter(csv_servicos, true); //true para fazer append, sem ele escreve por cima do que estiver
 
         for (int i = 0; i < lista.length; i++) {
             writer.append(String.valueOf(lista[i]));
@@ -29,7 +24,7 @@ public class ST extends Server {
     // https://stackoverflow.com/questions/40074840/reading-a-csv-file-into-a-array
     public static void csvToString() {
         // String fileName= "rmi.csv";
-        File file = new File("rmi.csv");
+        File file = new File(csv_servicos);
 
         // this gives you a 2-dimensional array of strings
         lines = new ArrayList<>();
@@ -98,32 +93,7 @@ public class ST extends Server {
                 if (lista_respostas[2].equals("1")) {
 
                     csvToString();
-
-                    // FALTA METER BONITO E OBVIAMENTE PASSAR PARA O LADO DO CLIENTE, DA PARA ENVIAR
-                    // ARRAYLIST MULTIDIMENSIONAL POR SOCKET'
-                    if (lista_respostas[3].equals("1")) {
-                        System.out.println("Lista de Serviços com tecnologia Sockets TCP: \n");
-                        for (int i = 1; i <= lines.size(); i++) {
-                            if (lines.get(i - 1).get(2).equals("1")) {
-                                System.out.println(
-                                        i + "-IP: " + lines.get(i - 1).get(3) + " PORT: " + lines.get(i - 1).get(4));
-                                System.out.println("  Descrição: " + lines.get(i - 1).get(1));
-                                System.out.println("  Autor do Registo: " + lines.get(i - 1).get(0));
-                                System.out.println("\n");
-                            }
-                        }
-                    } else if (lista_respostas[3].equals("2")) {
-                        System.out.println("Lista de Serviços com tecnologia JAVA RMI: \n");
-                        for (int i = 1; i <= lines.size(); i++) {
-                            if (lines.get(i - 1).get(2).equals("2")) {
-                                System.out.println(i + "-IP: " + lines.get(i - 1).get(3) + " PORT: "
-                                        + lines.get(i - 1).get(4) + " Nome: " + lines.get(i - 1).get(5));
-                                System.out.println("  Descrição: " + lines.get(i - 1).get(1));
-                                System.out.println("  Autor do Registo: " + lines.get(i - 1).get(0));
-                                System.out.println("\n");
-                            }
-                        }
-                    }
+                    out.writeObject(lines); // envia arraylist 2d
 
                 } else if (lista_respostas[2].equals("2")) {
 

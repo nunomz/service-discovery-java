@@ -4,7 +4,7 @@ import java.io.*;
 public class SI extends Server {
 	static int DEFAULT_PORT = 2000;
 	static String cc, cc_hashed;
-	static boolean res;
+	//static boolean res; ACHO QUE ISTO NAO ESTA AQUI A FAZER NADA, MAS VERIFICAR
 
 	public static void Ticketing(String host_st, int port_st, String hash, ObjectOutputStream obj_out,
 			Socket ligacao_si) {
@@ -63,12 +63,12 @@ public class SI extends Server {
 
 				// verifica se o cc esta registado
 				if (verification.getHash(cc_hashed) == 1) {
-					res = true;
+					//res = true;
 					System.out.print("Utilizador autenticado com a hash " + cc_hashed);
 					// out.println(res);
 
 				} else {
-					res = false;
+					//res = false;
 					// out.print("Erro: Utilizador nao encontrado");
 					ligacao_si.close();
 					System.exit(-1);
