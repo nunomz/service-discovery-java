@@ -1,5 +1,9 @@
 import java.util.*;
 import java.net.*;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.io.*;
 
 public class Client {
@@ -10,10 +14,10 @@ public class Client {
 	static String cc, servidor = DEFAULT_HOST, host_st;
 	static String[] lista_final = new String[8];
 	static int porto_st, porto = DEFAULT_PORT;
-	//static List<List<String>> lista_servicos;
+	// static List<List<String>> lista_servicos;
 
 	public static void connectServiceTCP(String ip_servico, int port_servico) {
-		try{
+		try {
 			Socket ligacao_tcp = null;
 
 			try {
@@ -26,25 +30,32 @@ public class Client {
 
 			System.out.println("Conectado ao serviço TCP");
 
-			BufferedReader in = new BufferedReader (new InputStreamReader(ligacao_tcp.getInputStream()));
+			BufferedReader in = new BufferedReader(new InputStreamReader(ligacao_tcp.getInputStream()));
 			PrintWriter out = new PrintWriter(ligacao_tcp.getOutputStream());
+			TimeZone tz = TimeZone.getTimeZone("UTC");
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
 
-			out.println("getHumidity");
+			df.setTimeZone(tz);
+
+			String nowAsISO = df.format(new Date());
+
+			out.println("getHumidity " + nowAsISO);
+			out.flush();
 			System.out.println("Humidade: " + in.readLine());
 			System.out.println("Prima n para obter nova consulta ou qualquer outro botão para sair.");
 			String escolha = sc.nextLine();
-			if(escolha.equals("n")){
+			if (escolha.equals("n")) {
 				out.println("getHumidity");
 				System.out.println("Humidade: " + in.readLine());
-			}else{
+			} else {
 				ligacao_tcp.close();
 				System.exit(1);
 			}
-		}catch(IOException e){
+		} catch (IOException e) {
 			System.out.println("Erro ao conectar ao serviço TCP");
 		}
 	}
-	
+
 	public static void main(String[] args) {
 
 		// Create a representation of the IP address of the Server: API
@@ -97,7 +108,7 @@ public class Client {
 
 			host_st = lista_SI[0];
 			porto_st = Integer.valueOf(lista_SI[1]);
-		
+
 			System.out.println("IP do Serviço de Ticketing: " + host_st + "\nPort do ST: " + porto_st
 					+ "\nChave de Acesso (Hash):" + lista_SI[2]);
 			lista_final[0] = lista_SI[2];
@@ -130,10 +141,10 @@ public class Client {
 
 			ObjectInputStream in = new ObjectInputStream(ligacao_st.getInputStream());
 			ObjectOutputStream out = new ObjectOutputStream(ligacao_st.getOutputStream());
-			//ADICIONA o cc à lista apos a hash 
-			lista_final[1]= cc;
+			// ADICIONA o cc à lista apos a hash
+			lista_final[1] = cc;
 			// printa o titulo
-			
+
 			System.out.print("****BEM VINDO AO SERVICO DE TICKETING****");
 
 			// Printa o menu
@@ -149,41 +160,43 @@ public class Client {
 					lista_final[3] = sc.nextLine();
 
 					out.writeObject(lista_final); // envia a lista apenas até a tecnologia
-					
-					@SuppressWarnings("unchecked") // sem isto dá um aviso ao compilar. parece-me batota mas funciona. tentar resolver
-					List<List<String>> lista_servicos = (List<List<String>>)in.readObject();
-					
-					if(lista_final[3].equals("1")){ // caso escolha TCP
-						
+
+					@SuppressWarnings("unchecked") // sem isto dá um aviso ao compilar. parece-me batota mas funciona.
+													// tentar resolver
+					List<List<String>> lista_servicos = (List<List<String>>) in.readObject();
+
+					if (lista_final[3].equals("1")) { // caso escolha TCP
+
 						System.out.println("Lista de Serviços com tecnologia Sockets TCP: \n");
-                        for (int i = 1; i <= lista_servicos.size(); i++) {
-                            if (lista_servicos.get(i - 1).get(2).equals("1")) {
-                                System.out.println(
-                                        i + "-IP: " + lista_servicos.get(i - 1).get(3) + " PORT: " + lista_servicos.get(i - 1).get(4));
-                                System.out.println("  Descricao: " + lista_servicos.get(i - 1).get(1));
-                                System.out.println("  Autor do Registo: " + lista_servicos.get(i - 1).get(0));
-                                System.out.println("\n");
-                            }
-                        }
+						for (int i = 1; i <= lista_servicos.size(); i++) {
+							if (lista_servicos.get(i - 1).get(2).equals("1")) {
+								System.out.println(
+										i + "-IP: " + lista_servicos.get(i - 1).get(3) + " PORT: "
+												+ lista_servicos.get(i - 1).get(4));
+								System.out.println("  Descricao: " + lista_servicos.get(i - 1).get(1));
+								System.out.println("  Autor do Registo: " + lista_servicos.get(i - 1).get(0));
+								System.out.println("\n");
+							}
+						}
 
-                        System.out.println("A que servico se pretende conectar? (escolha o indice)");
-                        int escolha = sc.nextInt();
-                        String escolha2 = String.valueOf(escolha - 1);
-                        int port_tcp = Integer.valueOf(lista_servicos.get(escolha-1).get(4));
-                        connectServiceTCP(lista_servicos.get(escolha-1).get(3), port_tcp);
+						System.out.println("A que servico se pretende conectar? (escolha o indice)");
+						int escolha = sc.nextInt();
+						connectServiceTCP(lista_servicos.get(escolha - 1).get(3),
+								Integer.valueOf(lista_servicos.get(escolha - 1).get(4)));
 
-					}else if(lista_final[3].equals("2")){ // caso escolha RMI
-						
+					} else if (lista_final[3].equals("2")) { // caso escolha RMI
+
 						System.out.println("Lista de Serviços com tecnologia JAVA RMI: \n");
-                        for (int i = 1; i <= lista_servicos.size(); i++) {
-                            if (lista_servicos.get(i - 1).get(2).equals("2")) {
-                                System.out.println(i + "-IP: " + lista_servicos.get(i - 1).get(3) + " PORT: "
-                                        + lista_servicos.get(i - 1).get(4) + " Nome: " + lista_servicos.get(i - 1).get(5));
-                                System.out.println("  Descricao: " + lista_servicos.get(i - 1).get(1));
-                                System.out.println("  Autor do Registo: " + lista_servicos.get(i - 1).get(0));
-                                System.out.println("\n");
-                            }
-                        }
+						for (int i = 1; i <= lista_servicos.size(); i++) {
+							if (lista_servicos.get(i - 1).get(2).equals("2")) {
+								System.out.println(i + "-IP: " + lista_servicos.get(i - 1).get(3) + " PORT: "
+										+ lista_servicos.get(i - 1).get(4) + " Nome: "
+										+ lista_servicos.get(i - 1).get(5));
+								System.out.println("  Descricao: " + lista_servicos.get(i - 1).get(1));
+								System.out.println("  Autor do Registo: " + lista_servicos.get(i - 1).get(0));
+								System.out.println("\n");
+							}
+						}
 					}
 
 					break;
@@ -216,7 +229,8 @@ public class Client {
 							break;
 					}
 					out.writeObject(lista_final);
-					System.out.print("Registo efetuado com sucesso. Prima qualquer tecla para terminar a execução do programa. ");
+					System.out.print(
+							"Registo efetuado com sucesso. Prima qualquer tecla para terminar a execução do programa. ");
 					System.in.read();
 					System.exit(1);
 					break;
@@ -226,7 +240,7 @@ public class Client {
 					break;
 			}
 
-			//out.writeObject(lista_final);
+			// out.writeObject(lista_final);
 
 		} catch (Exception e) {
 			System.out.println("Erro ao comunicar com o servidor ST: " + e);

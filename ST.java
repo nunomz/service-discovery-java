@@ -8,7 +8,8 @@ public class ST extends Server {
     static List<List<String>> lines;
 
     public void toCsv(String[] lista) throws Exception {
-        FileWriter writer = new FileWriter(csv_servicos, true); //true para fazer append, sem ele escreve por cima do que estiver
+        FileWriter writer = new FileWriter(csv_servicos, true); // true para fazer append, sem ele escreve por cima do
+                                                                // que estiver
 
         for (int i = 0; i < lista.length; i++) {
             writer.append(String.valueOf(lista[i]));
@@ -115,10 +116,9 @@ public class ST extends Server {
                         lista_csv[5] = String.valueOf(lista_respostas[7]); // nome
                     }
                     toCsv(lista_csv);
-                    // System.out.print("Registo efetuado com sucesso.\nPrima qualquer tecla para
-                    // terminar a execução do programa. ");
-                    // System.in.read();
-                    // System.exit(0);
+                    out.close();
+                    ligacao_st.close();
+                   
                 }
 
             } catch (Exception e) {

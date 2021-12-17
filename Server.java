@@ -1,4 +1,3 @@
-
 public class Server {
 	static String DEFAULT_HOST;
 	static int port;
