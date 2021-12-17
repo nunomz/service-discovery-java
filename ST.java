@@ -3,7 +3,6 @@ import java.io.*;
 import java.util.*;
 
 public class ST extends Server {
-    static int DEFAULT_PORT = 3000;
     static String hash_st, csv_servicos = "servicos.csv";
     static String[] lista_csv;
     static List<List<String>> lines;

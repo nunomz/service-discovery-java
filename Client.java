@@ -12,6 +12,39 @@ public class Client {
 	static int porto_st, porto = DEFAULT_PORT;
 	//static List<List<String>> lista_servicos;
 
+	public static void connectServiceTCP(String ip_servico, int port_servico) {
+		try{
+			Socket ligacao_tcp = null;
+
+			try {
+				System.out.println("Tentando conexão com serviço no IP " + ip_servico + " e na porta " + port_servico);
+				ligacao_tcp = new Socket(ip_servico, port_servico);
+			} catch (IOException e) {
+				System.out.println("Erro na criacao da socket do serviço TCP");
+				System.exit(-1);
+			}
+
+			System.out.println("Conectado ao serviço TCP");
+
+			BufferedReader in = new BufferedReader (new InputStreamReader(ligacao_tcp.getInputStream()));
+			PrintWriter out = new PrintWriter(ligacao_tcp.getOutputStream());
+
+			out.println("getHumidity");
+			System.out.println("Humidade: " + in.readLine());
+			System.out.println("Prima n para obter nova consulta ou qualquer outro botão para sair.");
+			String escolha = sc.nextLine();
+			if(escolha.equals("n")){
+				out.println("getHumidity");
+				System.out.println("Humidade: " + in.readLine());
+			}else{
+				ligacao_tcp.close();
+				System.exit(1);
+			}
+		}catch(IOException e){
+			System.out.println("Erro ao conectar ao serviço TCP");
+		}
+	}
+	
 	public static void main(String[] args) {
 
 		// Create a representation of the IP address of the Server: API
@@ -73,7 +106,7 @@ public class Client {
 			// System.out.println("Terminou a ligacao ao SI");
 
 		} catch (Exception e) {
-			System.out.println("Erro ao comunicar com o servidor: " + e);
+			System.out.println("Erro ao comunicar com o servidor SI: " + e);
 			System.exit(1);
 		}
 	}
@@ -133,6 +166,12 @@ public class Client {
                             }
                         }
 
+                        System.out.println("A que servico se pretende conectar? (escolha o indice)");
+                        int escolha = sc.nextInt();
+                        String escolha2 = String.valueOf(escolha - 1);
+                        int port_tcp = Integer.valueOf(lista_servicos.get(escolha-1).get(4));
+                        connectServiceTCP(lista_servicos.get(escolha-1).get(3), port_tcp);
+
 					}else if(lista_final[3].equals("2")){ // caso escolha RMI
 						
 						System.out.println("Lista de Serviços com tecnologia JAVA RMI: \n");
@@ -190,7 +229,8 @@ public class Client {
 			//out.writeObject(lista_final);
 
 		} catch (Exception e) {
-			System.out.println("Erro ao comunicar com o servidor: " + e);
+			System.out.println("Erro ao comunicar com o servidor ST: " + e);
+			e.printStackTrace(System.out);
 			System.exit(1);
 		}
 	}
