@@ -2,7 +2,7 @@ import java.net.*;
 import java.io.*;
 
 public class ServiceHumidityServer {
-	static int DEFAULT_PORT=4000;
+	static int DEFAULT_PORT=8080;
 	
 	public static void main(String[] args) {
 		int port=DEFAULT_PORT;

@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.io.*;
 
 public class Client {
@@ -32,14 +33,11 @@ public class Client {
 
 			BufferedReader in = new BufferedReader(new InputStreamReader(ligacao_tcp.getInputStream()));
 			PrintWriter out = new PrintWriter(ligacao_tcp.getOutputStream());
-			TimeZone tz = TimeZone.getTimeZone("UTC");
-			DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
+			Instant instant = Instant.now();
+			String tsp = instant.toString();
+			String request = "getHumidity" + tsp;
 
-			df.setTimeZone(tz);
-
-			String nowAsISO = df.format(new Date());
-
-			out.println("getHumidity " + nowAsISO);
+			out.println(request); // https://www.timestamp-converter.com/
 			out.flush();
 			System.out.println("Humidade: " + in.readLine());
 			System.out.println("Prima n para obter nova consulta ou qualquer outro botão para sair.");
