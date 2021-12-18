@@ -35,15 +35,17 @@ public class Client {
 			PrintWriter out = new PrintWriter(ligacao_tcp.getOutputStream());
 			Instant instant = Instant.now();
 			String tsp = instant.toString();
-			String request = "getHumidity" + tsp;
+			String request = "getHumidity" + " " + tsp;
 
 			out.println(request); // https://www.timestamp-converter.com/
 			out.flush();
+			System.out.println(in.readLine());
 			System.out.println("Humidade: " + in.readLine());
 			System.out.println("Prima n para obter nova consulta ou qualquer outro botão para sair.");
 			String escolha = sc.nextLine();
 			if (escolha.equals("n")) {
-				out.println("getHumidity");
+				out.println("getHumidity" + " " + tsp);
+				String resultado = in.readLine();
 				System.out.println("Humidade: " + in.readLine());
 			} else {
 				ligacao_tcp.close();
