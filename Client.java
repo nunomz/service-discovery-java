@@ -17,6 +17,13 @@ public class Client {
 	static int porto_st, porto = DEFAULT_PORT;
 	// static List<List<String>> lista_servicos;
 
+	public static void connectServiceRMI(String ip_servico, String nome_servico) {
+			getTempRequestHandler handler;
+			Instant instant = Instant.now();
+			handler = new getTempRequestHandler(ip_servico,nome_servico,instant);
+			handler.putTemp();
+	}
+
 	public static void connectServiceTCP(String ip_servico, int port_servico) {
 		try {
 			Socket ligacao_tcp = null;
@@ -41,16 +48,6 @@ public class Client {
 			out.flush();
 			System.out.println(in.readLine());
 			System.out.println("Humidade: " + in.readLine());
-			System.out.println("Prima n para obter nova consulta ou qualquer outro botão para sair.");
-			String escolha = sc.nextLine();
-			if (escolha.equals("n")) {
-				out.println("getHumidity" + " " + tsp);
-				String resultado = in.readLine();
-				System.out.println("Humidade: " + in.readLine());
-			} else {
-				ligacao_tcp.close();
-				System.exit(1);
-			}
 		} catch (IOException e) {
 			System.out.println("Erro ao conectar ao serviço TCP");
 		}
@@ -181,6 +178,7 @@ public class Client {
 
 						System.out.println("A que servico se pretende conectar? (escolha o indice)");
 						int escolha = sc.nextInt();
+						sc.nextLine();
 						connectServiceTCP(lista_servicos.get(escolha - 1).get(3),
 								Integer.valueOf(lista_servicos.get(escolha - 1).get(4)));
 
@@ -197,6 +195,11 @@ public class Client {
 								System.out.println("\n");
 							}
 						}
+
+						System.out.println("A que servico se pretende conectar? (escolha o indice)");
+						int escolha = sc.nextInt();
+						sc.nextLine();
+						connectServiceRMI(lista_servicos.get(escolha - 1).get(3),lista_servicos.get(escolha - 1).get(5));
 					}
 
 					break;
