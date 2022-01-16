@@ -91,7 +91,7 @@ public class Client {
 			ObjectInputStream in = new ObjectInputStream(ligacao_si.getInputStream());
 			ObjectOutputStream out = new ObjectOutputStream(ligacao_si.getOutputStream());
 
-			System.out.println("Introduza o seu numero de CC");
+			System.out.print("Introduza o seu numero de CC: ");
 			cc = sc.nextLine();
 			out.writeObject(cc);
 
@@ -106,12 +106,14 @@ public class Client {
 			host_st = lista_SI[0];
 			porto_st = Integer.valueOf(lista_SI[1]);
 
-			System.out.println("IP do Serviço de Ticketing: " + host_st + "\nPort do ST: " + porto_st
-					+ "\nChave de Acesso (Hash):" + lista_SI[2]);
+			System.out.println("\nServiço de Ticketing encontrado!\n  IP: " + host_st + "\n  Port: " + porto_st
+					+ "\n  Chave de Acesso (Hash): " + lista_SI[2]);
 			lista_final[0] = lista_SI[2];
 			ligacao_si.close();
 			out.close();
-			// System.out.println("Terminou a ligacao ao SI");
+			
+			System.out.print("\nPrima qualquer tecla para terminar a ligação com o SI e conectar ao ST apresentado. (CTRL+C para sair) ");
+			sc.nextLine();
 
 		} catch (Exception e) {
 			System.out.println("Erro ao comunicar com o servidor SI: " + e);
@@ -127,7 +129,7 @@ public class Client {
 		try {
 			ligacao_st = new Socket(host_st2, porto_st2);
 			System.out
-					.println("Conexão estabelecida com Serviço de Ticketing no IP " + host_st + "e porto " + porto_st);
+					.println("\nConexão estabelecida com Serviço de Ticketing no IP " + host_st + " e porto " + porto_st);
 		} catch (IOException e) {
 			System.out.println("Erro");
 		}
@@ -142,18 +144,22 @@ public class Client {
 			lista_final[1] = cc;
 			// printa o titulo
 
-			System.out.print("****BEM VINDO AO SERVICO DE TICKETING****");
+			System.out.println("\n\n****BEM VINDO AO SERVICO DE TICKETING****\n");
 
 			// Printa o menu
 
-			System.out.println(
-					"********************************\nO que deseja fazer?            *\n                               *\n1-Consulta de servicos         *\n                               *\n                               *\n2-Registo de servico           *\n                               *\n********************************\n");
+			System.out.println("O que deseja fazer?");
+			System.out.println("\n  1. Consulta de servicos");
+			System.out.println("  2. Registo de servico");
+			System.out.print("\nIntroduza a sua escolha: ");
 			lista_final[2] = sc.nextLine();
 
 			switch (lista_final[2]) {
 				case "1":// CASO SEJA ESCOLHIDO CONSULTAR SERVIÇOS
-					System.out.println(
-							"********************************\nTecnologia a consultar?        *\n                               *\n1-JAVA Sockets TCP             *\n                               *\n                               *\n2-JAVA RMI                     *\n                               *\n********************************\n");
+					System.out.println("\nTecnologia a consultar?");
+					System.out.println("\n  1. JAVA Sockets TCP");
+					System.out.println("  2. JAVA RMI");
+					System.out.print("\nIntroduza a sua escolha: ");
 					lista_final[3] = sc.nextLine();
 
 					out.writeObject(lista_final); // envia a lista apenas até a tecnologia
@@ -164,19 +170,19 @@ public class Client {
 
 					if (lista_final[3].equals("1")) { // caso escolha TCP
 
-						System.out.println("Lista de Serviços com tecnologia Sockets TCP: \n");
+						System.out.println("\nLista de Serviços com tecnologia Sockets TCP: \n");
 						for (int i = 1; i <= lista_servicos.size(); i++) {
 							if (lista_servicos.get(i - 1).get(2).equals("1")) {
-								System.out.println(
-										i + "-IP: " + lista_servicos.get(i - 1).get(3) + " PORT: "
+								System.out.println("  " +
+										i + ". IP: " + lista_servicos.get(i - 1).get(3) + " PORT: "
 												+ lista_servicos.get(i - 1).get(4));
-								System.out.println("  Descricao: " + lista_servicos.get(i - 1).get(1));
-								System.out.println("  Autor do Registo: " + lista_servicos.get(i - 1).get(0));
+								System.out.println("     Descricao: " + lista_servicos.get(i - 1).get(1));
+								System.out.println("     Autor do Registo: " + lista_servicos.get(i - 1).get(0));
 								System.out.println("\n");
 							}
 						}
 
-						System.out.println("A que servico se pretende conectar? (escolha o indice)");
+						System.out.print("A que servico se pretende conectar? (escolha o indice) ");
 						int escolha = sc.nextInt();
 						sc.nextLine();
 						connectServiceTCP(lista_servicos.get(escolha - 1).get(3),
@@ -184,19 +190,19 @@ public class Client {
 
 					} else if (lista_final[3].equals("2")) { // caso escolha RMI
 
-						System.out.println("Lista de Serviços com tecnologia JAVA RMI: \n");
+						System.out.println("\nLista de Serviços com tecnologia JAVA RMI: \n");
 						for (int i = 1; i <= lista_servicos.size(); i++) {
 							if (lista_servicos.get(i - 1).get(2).equals("2")) {
-								System.out.println(i + "-IP: " + lista_servicos.get(i - 1).get(3) + " PORT: "
+								System.out.println("  " + i + ". IP: " + lista_servicos.get(i - 1).get(3) + " PORT: "
 										+ lista_servicos.get(i - 1).get(4) + " Nome: "
 										+ lista_servicos.get(i - 1).get(5));
-								System.out.println("  Descricao: " + lista_servicos.get(i - 1).get(1));
-								System.out.println("  Autor do Registo: " + lista_servicos.get(i - 1).get(0));
+								System.out.println("     Descricao: " + lista_servicos.get(i - 1).get(1));
+								System.out.println("     Autor do Registo: " + lista_servicos.get(i - 1).get(0));
 								System.out.println("\n");
 							}
 						}
 
-						System.out.println("A que servico se pretende conectar? (escolha o indice)");
+						System.out.print("A que servico se pretende conectar? (escolha o indice) ");
 						int escolha = sc.nextInt();
 						sc.nextLine();
 						connectServiceRMI(lista_servicos.get(escolha - 1).get(3),lista_servicos.get(escolha - 1).get(5));
@@ -204,30 +210,32 @@ public class Client {
 
 					break;
 				case "2":// CASO SEJA ESCOLHIDO REGISTO DE SERVIÇOS
-					System.out.println("Forneca a descricao do servico de rede");
+					System.out.print("\nForneca a descricao do servico de rede: ");
 					lista_final[3] = sc.nextLine();
-					System.out.println(
-							"********************************\nTecnologia desejada?        *\n                               *\n1-JAVA Sockets TCP             *\n                               *\n                               *\n2-JAVA RMI                     *\n                               *\n********************************\n");
+					System.out.println("\nTecnologia desejada?");
+					System.out.println("\n  1. JAVA Sockets TCP");
+					System.out.println("  2. JAVA RMI");
+					System.out.print("\nIntroduza a sua escolha: ");
 					lista_final[4] = sc.nextLine();
 					switch (lista_final[4]) {
 						case "1":
-							System.out.println("Forneca o IP: ");
+							System.out.print("\nForneca o IP: ");
 							lista_final[5] = sc.nextLine();
-							System.out.println("Forneca a porta: ");
+							System.out.print("Forneca a porta: ");
 							lista_final[6] = sc.nextLine();
 							break;
 
 						case "2":
-							System.out.println("Forneca o IP: ");
+							System.out.print("\nForneca o IP: ");
 							lista_final[5] = sc.nextLine();
-							System.out.println("Forneca a porta: ");
+							System.out.print("Forneca a porta: ");
 							lista_final[6] = sc.nextLine();
-							System.out.println("Forneca o nome: ");
+							System.out.print("Forneca o nome: ");
 							lista_final[7] = sc.nextLine();
 							break;
 
 						default:
-							System.out.println("Erro: Nao existe essa opcao");
+							System.out.println("\nErro: Nao existe essa opcao");
 							System.exit(-1);
 							break;
 					}
